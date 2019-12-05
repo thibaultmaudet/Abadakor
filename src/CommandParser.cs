@@ -35,6 +35,7 @@ namespace Abadakor
                     await message.Channel.SendMessageAsync("!me : Afficher les informations de l'utilisateur qui saisit la commande.");
                     await message.Channel.SendMessageAsync("!users list : Afficher la liste des utilisateurs.");
                     await message.Channel.SendMessageAsync("!users add <Prénom> <Nom> : Ajouter l'utilisateur qui saisi la commande dans la base de données.");
+                    await message.Channel.SendMessageAsync("!users informations <Prénom> <Nom> : Récupérer les informations d'un utilisateur en se basant sur son nom et prénom.");
                     await message.Channel.SendMessageAsync("!courses list : Afficher la liste des cours.");
                     await message.Channel.SendMessageAsync(":courses add <Cours> : Ajouter un cours.");
                     break;
@@ -98,10 +99,10 @@ namespace Abadakor
                         await message.Channel.SendMessageAsync("Pas d'utilisateurs enregistrés actuellement");
                     else
                     {
-                        await message.Channel.SendMessageAsync("Affichage de la liste des utilisateurs enregistrés");
+                        await message.Channel.SendMessageAsync("Liste des utilisateurs enregistrés :");
 
                         foreach (User user in users)
-                            await message.Channel.SendMessageAsync("- " + user.FirstName + " " + user.Name);
+                            await message.Channel.SendMessageAsync("    - " + user.FirstName + " " + user.Name + " (ID Discord : " + user.Id + ")"); 
                     }
                     break;
                 case "add":
@@ -109,6 +110,26 @@ namespace Abadakor
                         await message.Channel.SendMessageAsync("L'utilisateur " + args[2] + " " + args[3] + "a été ajouté.");
                     else
                         await message.Channel.SendMessageAsync("Une erreur s'est produite pendant l'ajout de l'utilisateur.");
+                    break;
+                case "informations":
+                    users = Database.GetUsers(args[2], args[3]);
+
+                    if (users == null)
+                    {
+                        await message.Channel.SendMessageAsync("Une erreur s'est produite pendant la récupération de la liste des utilisateurs.");
+
+                        return;
+                    }
+
+                    if (users.Count == 0)
+                        await message.Channel.SendMessageAsync("Pas d'utilisateurs enregistrés sous ce nom actuellement");
+                    else
+                    {
+                        await message.Channel.SendMessageAsync("Affichage de la liste des utilisateurs enregistrés");
+
+                        foreach (User user in users)
+                            await message.Channel.SendMessageAsync("    - " + user.FirstName + " " + user.Name + " (ID Discord : " + user.Id + ")");
+                    }
                     break;
                 default:
                     await message.Channel.SendMessageAsync("Commande inconnue. !help pour afficher la liste des commandes");

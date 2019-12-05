@@ -32,9 +32,7 @@ namespace Abadakor
                 return instance;
             }
         }
-
-        public bool IsOpen { get => isOpen; }
-
+        
         public void Open()
         {
             string connectionString = "SERVER=" + Settings.Database.Host + ";DATABASE=" + Settings.Database.Name + ";UID=" + Settings.Database.User + ";PASSWORD=" + Settings.Database.Password + ";";
@@ -44,15 +42,11 @@ namespace Abadakor
             try
             {
                 mySqlConnection.Open();
-
-                isOpen = true;
-
+                
                 Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " Connecté à la base de données");
             }
             catch (Exception ex)
             {
-                isOpen = false;
-
                 Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
 
                 Console.WriteLine("Erreur : " + ex.Message);
@@ -61,7 +55,7 @@ namespace Abadakor
 
         public List<User> GetUsers()
         {
-            if (!isOpen) return default;
+            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
 
             MySqlCommand command = mySqlConnection.CreateCommand();
 
@@ -74,7 +68,38 @@ namespace Abadakor
                 MySqlDataReader dataReader = command.ExecuteReader();
 
                 while (dataReader.Read())
-                    users.Add(new User() { FirstName = dataReader.GetString(dataReader.GetOrdinal("firstName")), Name = dataReader.GetString(dataReader.GetOrdinal("lastName")) });
+                    users.Add(new User() { Id = dataReader.GetString(dataReader.GetOrdinal("id")), FirstName = dataReader.GetString(dataReader.GetOrdinal("firstName")), Name = dataReader.GetString(dataReader.GetOrdinal("lastName")) });
+
+                dataReader.Close();
+
+                return users;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+
+                return default;
+            }
+        }
+
+        public List<User> GetUsers(string firstName, string lastName)
+        {
+            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
+
+            MySqlCommand command = mySqlConnection.CreateCommand();
+
+            try
+            {
+                List<User> users = new List<User>();
+
+                command.CommandText = "SELECT * FROM Users WHERE firstName LIKE @firstName AND lastName LIKE @lastName";
+                command.Parameters.AddWithValue("@firstName", firstName);
+                command.Parameters.AddWithValue("@lastName", lastName);
+
+                MySqlDataReader dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                    users.Add(new User() { Id = dataReader.GetString(dataReader.GetOrdinal("id")), FirstName = dataReader.GetString(dataReader.GetOrdinal("firstName")), Name = dataReader.GetString(dataReader.GetOrdinal("lastName")) });
 
                 dataReader.Close();
 
@@ -90,7 +115,7 @@ namespace Abadakor
 
         public User GetUser(string id)
         {
-            if (!isOpen) return default;
+            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
 
             User user = null;
 
@@ -119,7 +144,7 @@ namespace Abadakor
 
         public bool AddUser(string id, string firstName, string lastName)
         {
-            if (!isOpen) return false;
+            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
 
             MySqlCommand command = mySqlConnection.CreateCommand();
 
@@ -145,7 +170,7 @@ namespace Abadakor
 
         public List<Course> GetCourses()
         {
-            if (!isOpen) return default;
+            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
 
             MySqlCommand command = mySqlConnection.CreateCommand();
 
@@ -174,7 +199,7 @@ namespace Abadakor
 
         public bool AddCourse(string caption)
         {
-            if (!isOpen) return false;
+            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
 
             MySqlCommand command = mySqlConnection.CreateCommand();
 
