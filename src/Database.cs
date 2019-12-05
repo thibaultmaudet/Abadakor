@@ -47,7 +47,7 @@ namespace Abadakor
 
                 isOpen = true;
 
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "Connecté à la base de données");
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " Connecté à la base de données");
             }
             catch (Exception ex)
             {
@@ -104,7 +104,7 @@ namespace Abadakor
                 MySqlDataReader dataReader = command.ExecuteReader();
 
                 while (dataReader.Read())
-                    user = new User() { FirstName = dataReader.GetString(dataReader.GetOrdinal("firstName")), Name = dataReader.GetString(dataReader.GetOrdinal("lastName")) };
+                    user = new User() { Id = dataReader.GetString(dataReader.GetOrdinal("id")), FirstName = dataReader.GetString(dataReader.GetOrdinal("firstName")), Name = dataReader.GetString(dataReader.GetOrdinal("lastName")) };
 
                 dataReader.Close();
 
@@ -130,6 +130,58 @@ namespace Abadakor
                 command.Parameters.AddWithValue("@firstName", firstName);
                 command.Parameters.AddWithValue("@lastName", lastName);
                 command.Parameters.AddWithValue("@timestamp", DateTime.Now);
+
+                command.ExecuteNonQuery();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+
+                return false;
+            }
+        }
+
+        public List<Course> GetCourses()
+        {
+            if (!isOpen) return default;
+
+            MySqlCommand command = mySqlConnection.CreateCommand();
+
+            try
+            {
+                List<Course> courses = new List<Course>();
+
+                command.CommandText = "SELECT * FROM Courses";
+
+                MySqlDataReader dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                    courses.Add(new Course() { Id = dataReader.GetInt32(dataReader.GetOrdinal("id")), Caption = dataReader.GetString(dataReader.GetOrdinal("caption")) });
+
+                dataReader.Close();
+
+                return courses;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+
+                return default;
+            }
+        }
+
+        public bool AddCourse(string caption)
+        {
+            if (!isOpen) return false;
+
+            MySqlCommand command = mySqlConnection.CreateCommand();
+
+            try
+            {
+                command.CommandText = "INSERT INTO Courses (caption) VALUES (@caption)";
+                command.Parameters.AddWithValue("@caption", caption);
 
                 command.ExecuteNonQuery();
 
