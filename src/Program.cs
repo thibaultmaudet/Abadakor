@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using MySql.Data.MySqlClient;
 using System;
 using System.Data.SqlClient;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Abadakor
@@ -33,6 +34,9 @@ namespace Abadakor
 
         public async Task MainAsync()
         {
+            Console.WriteLine(System.Runtime.InteropServices.RuntimeInformation.OSDescription);
+            Console.WriteLine(Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product + " " + Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version);
+
             // Tokens should be considered secret data, and never hard-coded.
             await discordSocketClient.LoginAsync(TokenType.Bot, Settings.Token);
             await discordSocketClient.StartAsync();

@@ -3,8 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <AssemblyVersion>1.0.0.69</AssemblyVersion>
-    <FileVersion>1.0.0.69</FileVersion>
+    <AssemblyVersion>1.0.0.77</AssemblyVersion>
+    <FileVersion>1.0.0.77</FileVersion>
     <Company>AstanaCorp</Company>
     <Authors>MAUDET Thibault; RICHARD Antonin; GAILLIARD Romain</Authors>
     <Description>Bot Discord permettant la gestion d'utilisateur et de cours et l'association de cours pour un utilisateur spécifique.</Description>

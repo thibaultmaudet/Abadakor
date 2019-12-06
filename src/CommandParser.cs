@@ -19,7 +19,7 @@ namespace Abadakor
                     GetUsersArguments(args, message);
                     break;
                 case "me":
-                    User user = Database.GetUser(message.Author.Id.ToString());
+                    User user = Database.GetUser(message.Author.Username.ToString());
 
                     if (user == null)
                         await message.Channel.SendMessageAsync("Une erreur s'est produite durant la récupération de l'utilisateur");
@@ -30,18 +30,7 @@ namespace Abadakor
                     GetCoursesArguments(args, message);
                     break;
                 case "help":
-                    await message.Channel.SendMessageAsync("Aide :");
-                    await message.Channel.SendMessageAsync("Toutes les commandes doivent commencé par \"!\".");
-                    await message.Channel.SendMessageAsync("!me : Afficher les informations de l'utilisateur qui saisit la commande.");
-                    await message.Channel.SendMessageAsync("!users list : Afficher la liste des utilisateurs.");
-                    await message.Channel.SendMessageAsync("!users add <Prénom> <Nom> : Ajouter l'utilisateur qui saisi la commande dans la base de données.");
-                    await message.Channel.SendMessageAsync("!users informations <Prénom> <Nom> : Récupérer les informations d'un utilisateur en se basant sur son nom et prénom.");
-                    await message.Channel.SendMessageAsync("!courses list : Afficher la liste des cours.");
-                    await message.Channel.SendMessageAsync("!courses add <Cours> : Ajouter un cours.");
-                    await message.Channel.SendMessageAsync("!courses associate <IDCours> : Associer un utilisateur avec un cours.");
-                    await message.Channel.SendMessageAsync("!courses mine : Lister les cours associés à l'utilisateur courant.");
-                    await message.Channel.SendMessageAsync("!courses check <IDCours> : Cocher un cours pour l'utilisateur courant.");
-                    await message.Channel.SendMessageAsync("!courses uncheck <IDCours> : Décocher un cours pour l'utilisateur courant.");
+                    await message.Channel.SendMessageAsync("Aide :" + Environment.NewLine + "Toutes les commandes doivent commencé par \"!\"." + Environment.NewLine + "!me : Afficher les informations de l'utilisateur qui saisit la commande." + "!users list : Afficher la liste des utilisateurs." + Environment.NewLine + "!users add <Prénom> <Nom> : Ajouter l'utilisateur qui saisi la commande dans la base de données." + "!users informations <Prénom> <Nom> : Récupérer les informations d'un utilisateur en se basant sur son nom et prénom." + Environment.NewLine + "!courses list : Afficher la liste des cours." + Environment.NewLine + "!courses add <Cours> : Ajouter un cours." + Environment.NewLine + "!courses associate <IDCours> : Associer un utilisateur avec un cours." + Environment.NewLine + "!courses mine : Lister les cours associés à l'utilisateur courant." + Environment.NewLine + "!courses check <IDCours> : Cocher un cours pour l'utilisateur courant." + Environment.NewLine + "!courses uncheck <IDCours> : Décocher un cours pour l'utilisateur courant.");
                     break;
                 default:
                     await message.Channel.SendMessageAsync("Commande inconnue. !help pour afficher la liste des commandes");
@@ -64,13 +53,15 @@ namespace Abadakor
                     }
 
                     if (courses.Count == 0)
-                        await message.Channel.SendMessageAsync("Pas de cours enregistrés actuellement");
+                        await message.Channel.SendMessageAsync("Je n'arrive pas à trouver de cours d'enregistré.");
                     else
                     {
-                        await message.Channel.SendMessageAsync("Affichage de la liste des cours enregistrés");
+                        string coursesList = "Voici la liste des cours qui j'ai réussi à récupérer :";
 
                         foreach (Course c in courses)
-                            await message.Channel.SendMessageAsync("- " + c.Caption + " (ID : " + c.Id + ")");
+                            coursesList += Environment.NewLine + "- " + c.Caption + " ~ ID du cours : " + c.Id + ".";
+
+                        await message.Channel.SendMessageAsync(coursesList);
                     }
                     break;
                 case "add":
@@ -119,13 +110,16 @@ namespace Abadakor
                         await message.Channel.SendMessageAsync("Pas de cours associés à l'utilisateur actuellement");
                     else
                     {
-                        await message.Channel.SendMessageAsync("Affichage de la liste des cours enregistrés");
+                        string stateCourse = "Voici la liste des cours enregistrés que j'ai réussi à récupérer.";
+
 
                         foreach (Course c in courses)
                             if (c.State == 0)
-                                await message.Channel.SendMessageAsync("- Etat du cours " + c.Caption + " : :x: (ID:" + c.Id + ")");
-                        else if(c.State==1)
-                                await message.Channel.SendMessageAsync("- Etat du cours " + c.Caption + " : :white_check_mark: (ID:" + c.Id + ")");
+                                stateCourse += Environment.NewLine + "- Etat du cours " + c.Caption + " : :x: (ID:" + c.Id + ")";
+                            else if(c.State==1)
+                                 stateCourse += Environment.NewLine + "- Etat du cours " + c.Caption + " : :white_check_mark: (ID:" + c.Id + ")";
+
+                        await message.Channel.SendMessageAsync(stateCourse);
                     }
                     break;
                 case "check":
@@ -165,13 +159,16 @@ namespace Abadakor
                     }
 
                     if (users.Count == 0)
-                        await message.Channel.SendMessageAsync("Pas d'utilisateurs enregistrés actuellement");
+                        await message.Channel.SendMessageAsync("Je n'arrive pas à trouver des utilisateurs enregistrés.");
                     else
                     {
-                        await message.Channel.SendMessageAsync("Liste des utilisateurs enregistrés :");
+                        string usersList = "Voici la liste des utilisateurs que j'ai pu récupérer :";
+
 
                         foreach (User user in users)
-                            await message.Channel.SendMessageAsync("- " + user.FirstName + " " + user.Name + " (ID Discord : " + user.Id + ")"); 
+                            usersList += Environment.NewLine + "- " + user.FirstName + " " + user.Name + " ~ ID Discord de l'utilisateur : " + user.Id + ".";
+
+                        await message.Channel.SendMessageAsync(usersList); 
                     }
                     break;
                 case "add":
@@ -180,10 +177,10 @@ namespace Abadakor
                         if (Database.AddUser(message.Author.Id.ToString(), args[2], args[3]))
                             await message.Channel.SendMessageAsync("L'utilisateur " + args[2] + " " + args[3] + " a été ajouté.");
                         else
-                            await message.Channel.SendMessageAsync("Vous avez déjà ajouté un utilisateur avec ce compte ?");
+                            await message.Channel.SendMessageAsync("Vous n'auriez pas déjà ajouté un utilisateur avec ce compte ?");
                     }
                     else
-                        await message.Channel.SendMessageAsync("Structure de la commande : !users add <Prénom> <Nom>");                    
+                        await message.Channel.SendMessageAsync("Structure de la commande : !users add <Prénom> <Nom>");
                     break;
                 case "informations":
                     users = Database.GetUsers(args[2], args[3]);
@@ -199,10 +196,12 @@ namespace Abadakor
                         await message.Channel.SendMessageAsync("Pas d'utilisateurs enregistrés sous ce nom actuellement");
                     else
                     {
-                        await message.Channel.SendMessageAsync("Affichage de la liste des utilisateurs enregistrés");
-
+                        string usersList = "Voici la liste des utilisateur portant ce nom que j'ai réussi à trouver :";
+                        
                         foreach (User user in users)
-                            await message.Channel.SendMessageAsync("    - " + user.FirstName + " " + user.Name + " (ID Discord : " + user.Id + ")");
+                            usersList += Environment.NewLine + "- " + user.FirstName + " " + user.Name + " ~ ID Discord de l'utilisateur : " + user.Id + ".";
+
+                        await message.Channel.SendMessageAsync(usersList);
                     }
                     break;
                 default:

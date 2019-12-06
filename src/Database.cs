@@ -28,12 +28,27 @@ namespace Abadakor
                 return instance;
             }
         }
-        
+
+        public Database()
+        {
+            mySqlConnection = new MySqlConnection();
+            mySqlConnection.StateChange += MySqlConnection_StateChange;
+        }
+
+        private void MySqlConnection_StateChange(object sender, System.Data.StateChangeEventArgs e)
+        {
+            if (mySqlConnection.State == System.Data.ConnectionState.Broken || mySqlConnection.State == System.Data.ConnectionState.Closed)
+                Open();
+        }
+
         public void Open()
         {
             string connectionString = "SERVER=" + Settings.Database.Host + ";DATABASE=" + Settings.Database.Name + ";UID=" + Settings.Database.User + ";PASSWORD=" + Settings.Database.Password + ";";
 
-            mySqlConnection = new MySqlConnection(connectionString);
+            mySqlConnection.ConnectionString = connectionString;
+
+            Console.WriteLine("Connexion à la base de donnée en cours...");
+            Console.WriteLine("Merci de patientez quelques instants.");
 
             try
             {
@@ -43,16 +58,12 @@ namespace Abadakor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
-
-                Console.WriteLine("Erreur : " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
         public List<User> GetUsers()
         {
-            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
-
             MySqlCommand command = mySqlConnection.CreateCommand();
 
             try
@@ -72,7 +83,7 @@ namespace Abadakor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
 
                 return default;
             }
@@ -80,8 +91,6 @@ namespace Abadakor
 
         public List<User> GetUsers(string firstName, string lastName)
         {
-            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
-
             MySqlCommand command = mySqlConnection.CreateCommand();
 
             try
@@ -103,7 +112,7 @@ namespace Abadakor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
 
                 return default;
             }
@@ -111,8 +120,6 @@ namespace Abadakor
 
         public User GetUser(string id)
         {
-            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
-
             User user = null;
 
             MySqlCommand command = mySqlConnection.CreateCommand();
@@ -133,15 +140,14 @@ namespace Abadakor
             }
             catch(Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
+
                 return default;
             }
         }
 
         public bool AddUser(string id, string firstName, string lastName)
         {
-            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
-
             MySqlCommand command = mySqlConnection.CreateCommand();
 
             try
@@ -158,7 +164,7 @@ namespace Abadakor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
 
                 return false;
             }
@@ -166,8 +172,6 @@ namespace Abadakor
 
         public List<Course> GetCourses()
         {
-            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
-
             MySqlCommand command = mySqlConnection.CreateCommand();
 
             try
@@ -187,7 +191,7 @@ namespace Abadakor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
 
                 return default;
             }
@@ -195,8 +199,6 @@ namespace Abadakor
 
         public List<Course> GetCourses(string userId)
         {
-            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
-
             MySqlCommand command = mySqlConnection.CreateCommand();
 
             try
@@ -217,7 +219,7 @@ namespace Abadakor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
 
                 return default;
             }
@@ -225,8 +227,6 @@ namespace Abadakor
 
         public Course GetCourse(string caption)
         {
-            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
-
             Course course = null;
 
             MySqlCommand command = mySqlConnection.CreateCommand();
@@ -247,15 +247,14 @@ namespace Abadakor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
+
                 return default;
             }
         }
 
         public Course GetCourse(int id)
         {
-            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
-
             Course course = null;
 
             MySqlCommand command = mySqlConnection.CreateCommand();
@@ -276,15 +275,14 @@ namespace Abadakor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
+
                 return default;
             }
         }
 
         public bool AddCourse(string caption)
         {
-            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
-
             MySqlCommand command = mySqlConnection.CreateCommand();
 
             try
@@ -298,7 +296,7 @@ namespace Abadakor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
 
                 return false;
             }
@@ -306,8 +304,6 @@ namespace Abadakor
 
         public bool CreateAssociation(string userId, int courseId)
         {
-            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
-
             MySqlCommand command = mySqlConnection.CreateCommand();
 
             try
@@ -322,7 +318,7 @@ namespace Abadakor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
 
                 return false;
             }
@@ -330,8 +326,6 @@ namespace Abadakor
 
         public bool UpdateState(string userId, int courseId, int state)
         {
-            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
-
             MySqlCommand command = mySqlConnection.CreateCommand();
 
             try
@@ -347,7 +341,7 @@ namespace Abadakor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message + Environment.NewLine + ex.StackTrace);
 
                 return false;
             }
