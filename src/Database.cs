@@ -1,18 +1,14 @@
 ﻿using Abadakor.Models;
-using Abadakor.Settings;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Abadakor
 {
     public class Database
     {
         public static Settings.Settings Settings => Abadakor.Settings.Settings.Instance;
-
-        private bool isOpen;
-
+        
         private MySqlConnection mySqlConnection;
 
         private static volatile Database instance;
@@ -197,6 +193,94 @@ namespace Abadakor
             }
         }
 
+        public List<Course> GetCourses(string userId)
+        {
+            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
+
+            MySqlCommand command = mySqlConnection.CreateCommand();
+
+            try
+            {
+                List<Course> courses = new List<Course>();
+
+                command.CommandText = "SELECT Courses.caption AS Caption, Courses.id AS CourseID, assoc_coursesusers.state FROM assoc_coursesusers, Courses WHERE assoc_coursesusers.id_course = Courses.id AND assoc_coursesusers.id_user = @userId";
+                command.Parameters.AddWithValue("@userId", userId);
+
+                MySqlDataReader dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                    courses.Add(new Course() { Id = dataReader.GetInt32(dataReader.GetOrdinal("CourseID")), Caption = dataReader.GetString(dataReader.GetOrdinal("Caption")), State = dataReader.GetInt32(dataReader.GetOrdinal("state")) });
+
+                dataReader.Close();
+
+                return courses;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+
+                return default;
+            }
+        }
+
+        public Course GetCourse(string caption)
+        {
+            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
+
+            Course course = null;
+
+            MySqlCommand command = mySqlConnection.CreateCommand();
+
+            try
+            {
+                command.CommandText = "SELECT * FROM Courses WHERE caption = @caption";
+                command.Parameters.AddWithValue("@caption", caption);
+
+                MySqlDataReader dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                    course = new Course() { Id = dataReader.GetInt32(dataReader.GetOrdinal("id")), Caption = dataReader.GetString(dataReader.GetOrdinal("caption")) };
+
+                dataReader.Close();
+
+                return course;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                return default;
+            }
+        }
+
+        public Course GetCourse(int id)
+        {
+            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
+
+            Course course = null;
+
+            MySqlCommand command = mySqlConnection.CreateCommand();
+
+            try
+            {
+                command.CommandText = "SELECT * FROM Courses WHERE id = @id";
+                command.Parameters.AddWithValue("@id", id);
+
+                MySqlDataReader dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                    course = new Course() { Id = dataReader.GetInt32(dataReader.GetOrdinal("id")), Caption = dataReader.GetString(dataReader.GetOrdinal("caption")) };
+
+                dataReader.Close();
+
+                return course;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+                return default;
+            }
+        }
+
         public bool AddCourse(string caption)
         {
             if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
@@ -207,6 +291,55 @@ namespace Abadakor
             {
                 command.CommandText = "INSERT INTO Courses (caption) VALUES (@caption)";
                 command.Parameters.AddWithValue("@caption", caption);
+
+                command.ExecuteNonQuery();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+
+                return false;
+            }
+        }
+
+        public bool CreateAssociation(string userId, int courseId)
+        {
+            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
+
+            MySqlCommand command = mySqlConnection.CreateCommand();
+
+            try
+            {
+                command.CommandText = "INSERT INTO assoc_coursesusers (id_user,id_course,state) VALUES (@userId, @courseId, 0);";
+                command.Parameters.AddWithValue("@userId", userId);
+                command.Parameters.AddWithValue("@courseId", courseId);
+
+                command.ExecuteNonQuery();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + ex.Message);
+
+                return false;
+            }
+        }
+
+        public bool UpdateState(string userId, int courseId, int state)
+        {
+            if (mySqlConnection.State != System.Data.ConnectionState.Open) Open();
+
+            MySqlCommand command = mySqlConnection.CreateCommand();
+
+            try
+            {
+                command.CommandText = "UPDATE assoc_coursesusers SET state = @state WHERE assoc_coursesusers.id_user = @userId AND assoc_coursesusers.id_course = @courseId";
+                command.Parameters.AddWithValue("@userId", userId);
+                command.Parameters.AddWithValue("@courseId", courseId);
+                command.Parameters.AddWithValue("@state", state);
 
                 command.ExecuteNonQuery();
 

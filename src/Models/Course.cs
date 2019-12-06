@@ -8,5 +8,6 @@ namespace Abadakor.Models
     {
         public int Id { get; set; }
         public string Caption { get; set; }
+        public int State { get; set; }
     }
 }
