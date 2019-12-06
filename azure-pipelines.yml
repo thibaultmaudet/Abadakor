@@ -28,5 +28,5 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     
-- publish: $(System.DefaultWorkingDirectory)/bin/WebApp
+- publish: $(System.DefaultWorkingDirectory)/bin/Debug/netcoreapp3.0
   artifact: WebApp
