@@ -66,7 +66,7 @@ namespace Abadakor
                         await message.Channel.SendMessageAsync("Affichage de la liste des cours enregistrés");
 
                         foreach (Course course in courses)
-                            await message.Channel.SendMessageAsync("- " + course.Caption);
+                            await message.Channel.SendMessageAsync("- ID= "+course.Id + " ~ " + course.Caption);
                     }
                     break;
                 case "add":
@@ -106,10 +106,18 @@ namespace Abadakor
                     }
                     break;
                 case "add":
-                    if (Database.AddUser(message.Author.Id.ToString(), args[2], args[3]))
-                        await message.Channel.SendMessageAsync("L'utilisateur " + args[2] + " " + args[3] + "a été ajouté.");
+                    if (args.Length == 4)
+                    {
+                        if (Database.AddUser(message.Author.Id.ToString(), args[2], args[3]))
+                            await message.Channel.SendMessageAsync("L'utilisateur " + args[2] + " " + args[3] + " a été ajouté.");
+                        else
+                            await message.Channel.SendMessageAsync("Vous avez déja ajouté un utilisateur avec ce compte ?");
+                    }
                     else
-                        await message.Channel.SendMessageAsync("Une erreur s'est produite pendant l'ajout de l'utilisateur.");
+                    {
+                        await message.Channel.SendMessageAsync("Erreur de synthax : !users add <Prénom> <Nom> : Ajouter l'utilisateur qui saisi la commande dans la base de données.");
+                    }
+                    
                     break;
                 case "informations":
                     users = Database.GetUsers(args[2], args[3]);
