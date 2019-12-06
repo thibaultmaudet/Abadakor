@@ -3,6 +3,6 @@
 ################################################################################
 
 /.vs
-/src/.vs/
-/src/obj
-/src/bin/
+/src/Abadakor/.vs/
+/src/Abadakor/obj
+/src/Abadakor/bin/

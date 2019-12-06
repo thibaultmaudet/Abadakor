@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Abadakor
 {
@@ -19,7 +20,7 @@ namespace Abadakor
                     GetUsersArguments(args, message);
                     break;
                 case "me":
-                    User user = Database.GetUser(message.Author.Username.ToString());
+                    User user = Database.GetUser(message.Author.Id.ToString());
 
                     if (user == null)
                         await message.Channel.SendMessageAsync("Une erreur s'est produite durant la récupération de l'utilisateur");
@@ -31,6 +32,16 @@ namespace Abadakor
                     break;
                 case "help":
                     await message.Channel.SendMessageAsync("Aide :" + Environment.NewLine + "Toutes les commandes doivent commencé par \"!\"." + Environment.NewLine + "!me : Afficher les informations de l'utilisateur qui saisit la commande." + "!users list : Afficher la liste des utilisateurs." + Environment.NewLine + "!users add <Prénom> <Nom> : Ajouter l'utilisateur qui saisi la commande dans la base de données." + "!users informations <Prénom> <Nom> : Récupérer les informations d'un utilisateur en se basant sur son nom et prénom." + Environment.NewLine + "!courses list : Afficher la liste des cours." + Environment.NewLine + "!courses add <Cours> : Ajouter un cours." + Environment.NewLine + "!courses associate <IDCours> : Associer un utilisateur avec un cours." + Environment.NewLine + "!courses mine : Lister les cours associés à l'utilisateur courant." + Environment.NewLine + "!courses check <IDCours> : Cocher un cours pour l'utilisateur courant." + Environment.NewLine + "!courses uncheck <IDCours> : Décocher un cours pour l'utilisateur courant.");
+                    break;
+                case "about":
+                    await message.Channel.DeleteMessageAsync(message.Id);
+                    await message.Channel.SendMessageAsync(
+                    Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product + " version" + Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version + Environment.NewLine + "Développé par Thibault MAUDET | Antonin RICHARD | Romain GAILLIARD");
+                    break;
+                case "version":
+                    await message.Channel.DeleteMessageAsync(message.Id);
+                    await message.Channel.SendMessageAsync(
+                    Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product + " version " + Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version);
                     break;
                 default:
                     await message.Channel.SendMessageAsync("Commande inconnue. !help pour afficher la liste des commandes");
