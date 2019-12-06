@@ -1,0 +1,246 @@
+.newclient body {
+  background-color: rgb(255, 255, 255);
+  font: 700 0.875em/1.38 Arial;
+  color: rgb(0, 147, 195);
+}
+
+.newclient .checkbox {
+  display: block;
+  float: left;
+  margin-top: 4px;
+}
+
+.newclient .checkbox-label {
+  display: block;
+  float: left;
+  clear: both;
+  width: 60%;
+  height: 22px;
+  margin: 23px 0 0 11.25%;
+}
+
+.newclient .container {
+  float: left;
+  clear: both;
+  width: 80%;
+  height: 173px;
+  margin: 42px 0 0 10%;
+  border: 1px solid rgb(0, 113, 150);
+  border-radius: 10px;
+}
+
+.newclient .container .text {
+  float: left;
+  font-size: 1em;
+  color: rgb(0, 147, 195);
+}
+
+.newclient .point-text {
+  display: block;
+  float: left;
+  margin-left: 6px;
+  font-weight: normal;
+  color: rgb(0, 147, 195);
+}
+
+.newclient ._input {
+  display: block;
+  position: relative;
+  float: left;
+  height: 23px;
+  padding: 0 10px;
+  border: 1px solid rgb(119, 119, 119);
+  border-radius: 3px;
+  background-color: rgba(6, 156, 196, 0.13);
+  font-size: 0.929em;
+  font-weight: 400;
+  color: rgb(0, 0, 0);
+}
+
+.newclient ._select {
+  display: block;
+  height: 30px;
+  padding-left: 10px;
+  border: 1px solid rgb(119, 119, 119);
+  border-radius: 3px;
+  background: url('../../question/macaw/images/select-arrows.svg') rgba(6, 156, 196, 0.13);
+  background-repeat: no-repeat;
+  background-size: auto auto;
+  background-position: right center;
+  font-size: 1em;
+  color: rgb(128, 147, 195);
+}
+
+.newclient .text-1 {
+  width: 65.8333333333%;
+  margin: 29px auto 0;
+  font-size: 2em;
+  text-align: center;
+  color: #007196;
+}
+
+.newclient .text-10 {
+  position: relative;
+  float: left;
+  clear: both;
+  z-index: 6;
+  width: 13.4722222222%;
+  margin: 42px 0 0 11.2803799999%;
+  font-size: 1em;
+  font-weight: 400;
+  color: rgb(0, 147, 195);
+}
+
+.newclient .text-11 {
+  float: left;
+  clear: both;
+  width: 69.7352430555%;
+  margin: 57px 0 0 11.27821%;
+  font-size: 1em;
+  color: rgb(0, 147, 195);
+}
+
+.newclient .text-12 {
+  float: left;
+  clear: both;
+  width: 69.7352430555%;
+  margin: 41px 0 0 11.2803799999%;
+  font-size: 1em;
+  color: rgb(0, 147, 195);
+}
+
+.newclient .text-2 {
+  width: 87.4727787456%;
+  margin: 12px 0 0 1.48356%;
+}
+
+.newclient .text-3 {
+  position: relative;
+  clear: both;
+  z-index: 10;
+  width: 26.306620209%;
+  margin: 21px 0 0 1.48356%;
+  font-weight: 400;
+}
+
+.newclient .text-1:active,
+.newclient .text-1:focus,
+.newclient .text-1:hover,
+.newclient .text-2:active,
+.newclient .text-2:focus,
+.newclient .text-2:hover,
+.newclient .text-3:active,
+.newclient .text-3:focus,
+.newclient .text-3:hover {
+  position: static;
+}
+
+.newclient .text-4 {
+  position: relative;
+  z-index: 11;
+  width: 17.0731707317%;
+  margin: -19px 0 0 48.95198%;
+  font-weight: 400;
+}
+
+.newclient .text-5 {
+  position: relative;
+  z-index: 14;
+  width: 16.8989547038%;
+  margin: 50px 0 0 1.48356%;
+  font-weight: 400;
+}
+
+.newclient .text-6 {
+  position: relative;
+  z-index: 16;
+  width: 16.8989547038%;
+  margin: 50px 0 0 3.82731%;
+  font-weight: 400;
+}
+
+.newclient .text-7 {
+  float: left;
+  clear: both;
+  width: 69.7352430555%;
+  margin: 23px 0 0 11.27821%;
+  font-size: 1em;
+  color: rgb(0, 147, 195);
+}
+
+.newclient .text-8 {
+  position: relative;
+  float: left;
+  clear: both;
+  z-index: 2;
+  width: 13.4722222222%;
+  margin: 25px 0 0 11.2803799999%;
+  font-size: 1em;
+  font-weight: 400;
+  color: rgb(0, 147, 195);
+}
+
+.newclient .text-9 {
+  position: relative;
+  float: left;
+  z-index: 4;
+  width: 9.1666666666%;
+  margin: 25px 0 0 11.6862%;
+  font-size: 1em;
+  font-weight: 400;
+  color: rgb(0, 147, 195);
+}
+
+.newclient ._select-1 {
+  position: relative;
+  float: left;
+  z-index: 3;
+  width: 18.75%;
+  margin-top: 19px;
+}
+
+.newclient ._select-2 {
+  position: relative;
+  float: left;
+  z-index: 5;
+  width: 18.75%;
+  margin-top: 19px;
+}
+
+.newclient ._select-3 {
+  position: relative;
+  float: left;
+  z-index: 7;
+  width: 18.75%;
+  margin-top: 36px;
+}
+
+.newclient ._select-4 {
+  width: 49.7222222222%;
+  margin: 472px auto 0;
+}
+
+.newclient .container ._input-1 {
+  clear: both;
+  z-index: 12;
+  width: 19.6864111498%;
+  margin: -23px 0 0 25.43554%;
+}
+
+.newclient .container ._input-2 {
+  z-index: 13;
+  width: 26.6550522648%;
+  margin: -23px 0 0 67.07317%;
+}
+
+.newclient .container ._input-3 {
+  z-index: 15;
+  width: 19.6864111498%;
+  margin: 46px 0 0 7.05303%;
+}
+
+.newclient .container ._input-4 {
+  z-index: 17;
+  width: 25.6097560975%;
+  margin: 46px 0 0 1.22496%;
+}
